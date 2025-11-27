@@ -58,9 +58,11 @@ report_generator/
 ```
 class NewReport(AbstractReport):
     def load(files: List[T]):
+    """Логика для загрузки файлов"""
         pass
     
     def create_report() -> List[Dict[str, Any]]:
+    """Логика для обработки загруженных файлов"""
         pass
         
     ... # Дальше своя логика на ваше усмотрение
