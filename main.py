@@ -11,7 +11,7 @@ def main():
 
     arg_parser.add_argument("--files", nargs='+', required=True, help='Путь к файлам')
     arg_parser.add_argument('--report', type=str, required=True, choices=['performance'],
-                            help='Указываем какой именно тип отчета должен формироваться')
+                            help='Указываем какие типы отчетов должны формироваться')
     args = arg_parser.parse_args()
 
     try:
