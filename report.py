@@ -6,10 +6,6 @@ import model
 
 T = TypeVar("T")
 
-class ReadFileError(Exception):
-    pass
-
-
 class AbstractReport(ABC):
     def load(self, file_paths: List[T]) -> None:
         """
@@ -38,8 +34,8 @@ class EmployeeReport(AbstractReport):
                         self.employees.append(employee)
             except FileNotFoundError:
                 raise FileNotFoundError(f"Файл не найден: {path}")
-            except ReadFileError as e:
-                raise ReadFileError(f"Невозможно прочитать файл: {path}: {str(e)}")
+            except Exception as e:
+                raise Exception (f"Невозможно прочитать файл: {path}")
 
     def create_report(self) -> List[Dict[str, Any]]:
         if not self.employees:
