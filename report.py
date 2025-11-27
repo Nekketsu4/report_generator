@@ -35,7 +35,7 @@ class EmployeeReport(AbstractReport):
             except FileNotFoundError:
                 raise FileNotFoundError(f"Файл не найден: {path}")
             except Exception as e:
-                raise Exception (f"Невозможно прочитать файл: {path}")
+                raise Exception(f"Невозможно прочитать файл: {path}")
 
     def create_report(self) -> List[Dict[str, Any]]:
         if not self.employees:
@@ -58,7 +58,7 @@ class EmployeeReport(AbstractReport):
             avg_performance = value['performance_sum'] / value['count']
             report.append({
                 'position': position,
-                'avg_performance': avg_performance,
+                'avg_performance': round(avg_performance, 2),
             })
 
         report.sort(key=lambda x: x['avg_performance'], reverse=True)
