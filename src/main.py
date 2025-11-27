@@ -1,9 +1,12 @@
 import argparse
 from tabulate import tabulate
-from factory import create_factory_report
+from src.factory import create_factory_report
 
 
 def main():
+    """
+    Настройка скрипты через argparse и формирование таблицы с помощью tabulate
+    """
     arg_parser = argparse.ArgumentParser(description="Генератор отчетов")
 
     arg_parser.add_argument("--files", nargs='+', required=True, help='Путь к файлам')

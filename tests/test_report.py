@@ -20,8 +20,13 @@ cant_be_read = """name,position,performance,skills,team,experience_years
 Alex Ivanov,Backend Developer,45,4.8,"Python, Django, PostgreSQL, Docker",API Team,5
 Maria Petrova,Frontend Developer,38,string,"React, TypeScript, Redux, CSS",Web Team,4"""
 
+empty = """"""
+
 
 def test_can_load_data():
+    """
+    Тест что переданный файл будет успешно загружен и обработан
+    """
     report = EmployeeReport()
 
     report.load(['employees1.csv', ])
@@ -37,6 +42,10 @@ def test_can_load_data():
 
 
 def test_can_load_list_data():
+    """
+    Тест который проверяет что список переданных файлов будут успешно
+    загружены и обработаны
+    """
     report = EmployeeReport()
 
     with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as file:
@@ -59,21 +68,40 @@ def test_can_load_list_data():
         os.unlink(csv1)
         os.unlink(csv2)
 
-def test_return_empty_list():
+def test_return_empty_file():
+    """
+    Тест проверяет что в случае если передан пустой файл
+    то вернется пустой отчет
+    """
     report = EmployeeReport()
 
-    report.load([])
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as file:
+        file.write(empty)
+        empty_file = file.name
 
-    assert len(report.employees) == 0
-    assert len(report.create_report()) == 0
+    try:
+        report.load([empty_file])
+        created_report = report.create_report()
+
+        assert len(report.employees) == 0
+        assert len(report.create_report()) == 0
+        assert created_report == []
+    finally:
+        os.unlink(empty_file)
 
 def test_error_not_found_file():
+    """
+    Тест вызывает исключение если файл для обработки не найден
+    """
     report = EmployeeReport()
 
     with pytest.raises(FileNotFoundError, match='Файл не найден: not_found.csv'):
         report.load(['not_found.csv'])
 
 def test_error_cant_read_file():
+    """
+    Тест вызывает если исключение если переданный файл не поддерживается для чтения и обработки
+    """
     report = EmployeeReport()
 
     with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as file:
