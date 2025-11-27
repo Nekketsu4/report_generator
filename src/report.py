@@ -2,7 +2,7 @@ import csv
 from abc import ABC
 from typing import List, TypeVar, Dict, Any
 
-import model
+from src import model
 
 T = TypeVar("T")
 

@@ -2,7 +2,7 @@ import os
 import tempfile
 import pytest
 
-from report import EmployeeReport
+from src.report import EmployeeReport
 
 csv_file1 = """name,position,completed_tasks,performance,skills,team,experience_years
 David Chen,Mobile Developer,36,4.6,"Swift, Kotlin, React Native, iOS",Mobile Team,3

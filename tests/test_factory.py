@@ -1,7 +1,7 @@
 import pytest
 
-from factory import create_factory_report
-from report import EmployeeReport
+from src.factory import create_factory_report
+from src.report import EmployeeReport
 
 def test_factory_can_create_report_instance():
     create_factory = create_factory_report('performance')

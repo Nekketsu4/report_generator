@@ -1,4 +1,4 @@
-from report import AbstractReport, EmployeeReport
+from src.report import AbstractReport, EmployeeReport
 
 def create_factory_report(report_type: str) -> AbstractReport:
     if report_type == 'performance':

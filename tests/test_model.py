@@ -1,4 +1,4 @@
-import model
+from src import model
 
 
 def test_to_dict_employee():
