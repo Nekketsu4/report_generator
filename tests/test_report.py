@@ -1,8 +1,8 @@
+import os
 import tempfile
-
 import pytest
 
-from report import EmployeeReport, ReadFileError
+from report import EmployeeReport
 
 csv_file1 = """name,position,completed_tasks,performance,skills,team,experience_years
 David Chen,Mobile Developer,36,4.6,"Swift, Kotlin, React Native, iOS",Mobile Team,3
@@ -16,9 +16,9 @@ Anna Lee,DevOps Engineer,52,4.9,"AWS, Kubernetes, Terraform, Ansible",Infrastruc
 Mike Brown,QA Engineer,41,4.5,"Selenium, Jest, Cypress, Postman",Testing Team,4
 Sarah Johnson,Fullstack Developer,47,4.7,"JavaScript, Node.js, React, MongoDB",Web Team,5"""
 
-cant_be_read = """name,position,completed_tasks,performance,skills,team,experience_years
+cant_be_read = """name,position,performance,skills,team,experience_years
 Alex Ivanov,Backend Developer,45,4.8,"Python, Django, PostgreSQL, Docker",API Team,5
-Maria Petrova,Frontend Developer,38,4.7,"React, Redux, CSS",Web Team,4"""
+Maria Petrova,Frontend Developer,38,string,"React, TypeScript, Redux, CSS",Web Team,4"""
 
 
 def test_can_load_data():
@@ -47,13 +47,17 @@ def test_can_load_list_data():
         file.write(csv_file2)
         csv2 = file.name
 
-    report.load([csv1, csv2])
-    created_report = report.create_report()
+    try:
+        report.load([csv1, csv2])
+        created_report = report.create_report()
 
-    assert len(report.employees) == 8
-    assert len(report.create_report()) == 7
-    assert created_report[1]['position'] == 'Backend Developer'
-    assert created_report[1]['avg_performance'] == 4.8
+        assert len(report.employees) == 8
+        assert len(report.create_report()) == 7
+        assert created_report[1]['position'] == 'Backend Developer'
+        assert created_report[1]['avg_performance'] == 4.8
+    finally:
+        os.unlink(csv1)
+        os.unlink(csv2)
 
 def test_return_empty_list():
     report = EmployeeReport()
@@ -68,3 +72,16 @@ def test_error_not_found_file():
 
     with pytest.raises(FileNotFoundError, match='Файл не найден: not_found.csv'):
         report.load(['not_found.csv'])
+
+def test_error_cant_read_file():
+    report = EmployeeReport()
+
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as file:
+        file.write(cant_be_read)
+        cant_read = file.name
+
+    try:
+        with pytest.raises(Exception, match=f'Невозможно прочитать файл: {file.name}'):
+            report.load([cant_read])
+    finally:
+        os.unlink(cant_read)
